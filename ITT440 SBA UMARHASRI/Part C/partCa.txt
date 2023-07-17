@@ -1,0 +1,31 @@
+import socket
+
+def is_prime(number):
+    if number < 2:
+        return False
+    for i in range(2, int(number**0.5) + 1):
+        if number % i == 0:
+            return False
+    return True
+
+
+server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+
+server_address = ('localhost', 8080)
+
+
+server_socket.bind(server_address)
+
+print('Server is running...')
+
+while True:
+
+    data, address = server_socket.recvfrom(1024)
+    number = int(data.decode())
+
+
+    prime = is_prime(number)
+
+   
+    result = 'Prime' if prime else 'Not prime'
+    server_socket.sendto(result.encode(), address)
